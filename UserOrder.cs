@@ -22,7 +22,7 @@ namespace CafeManagement
 #pragma warning restore CS8618 // O campo não anulável precisa conter um valor não nulo ao sair do construtor. Considere declará-lo como anulável.
         {
             InitializeComponent();
-            SellerName.Text = Form1.user;
+            SellerName.Text = Form1.user; // No textbox "sellerName" sera exibido o usuario que entrou pelo forms "Forms1"
         }
         SqlConnection con = new SqlConnection(@"Data Source=localhost\sqlexpress;Initial Catalog=Teste99;Integrated Security=True");
         void populate()
@@ -36,6 +36,7 @@ namespace CafeManagement
             UsersGV.DataSource = ds.Tables[0];
             con.Close();
         }
+        //criando metodo para estanciar na classe categoria
         void FilterCat()
         {
             con.Open();
@@ -47,6 +48,7 @@ namespace CafeManagement
             UsersGV.DataSource = ds.Tables[0];
             con.Close();
         }
+        //criando variaveis para poder passar o novo valor correspondente as colunas da tabela "ItemsTbl" + novas colunas q irao integrar o data grid OrdesGv (price e total)
         string num = "0";
 #pragma warning disable CS0169 // O campo "UserOrder.qyt" nunca é usado
         int price, total;
@@ -55,7 +57,7 @@ namespace CafeManagement
         string item, cat;
 #pragma warning restore CS0169 // O campo "UserOrder.item" nunca é usado
 
-        
+
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
@@ -65,11 +67,11 @@ namespace CafeManagement
         {
 
         }
-        
-        
+
+
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -118,10 +120,10 @@ namespace CafeManagement
 
 
         DataTable table = new DataTable();
-        int sum = 0;
-        int flag = 0;
+        int sum = 0;    
+        int flag = 0; // variavel de controle
         private void UserOrder_Load(object sender, EventArgs e)
-        {
+        {    // criando a header, cabeçalho que ira aparecer acima da tabela OrdersGV
             populate();
             table.Columns.Add("Number", typeof(int));
             table.Columns.Add("ItemName", typeof(string));
@@ -134,7 +136,8 @@ namespace CafeManagement
 
         private void UsersGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            num = UsersGV.SelectedRows[0].Cells[0].Value.ToString();
+            //passando o valor das variaveis para a coluna correspondente na tabela "ItemsTbl"
+            num = UsersGV.SelectedRows[0].Cells[0].Value.ToString(); // variavel "num" agora assume os valores da primeira coluna de Itemdforms
             Name = UsersGV.SelectedRows[0].Cells[1].Value.ToString();
 #pragma warning disable CS8601 // Possível atribuição de referência nula.
             cat = UsersGV.SelectedRows[0].Cells[2].Value.ToString();
@@ -143,27 +146,31 @@ namespace CafeManagement
             flag = 1;
 
         }
+        //botao add to cart
         private void button1_Click(object sender, EventArgs e)
-        {
+        {    
+            //caso nao seja selecionada a quantidade do produto
             if (Quant.Text == "")
             {
                 MessageBox.Show("Digite a quantidade que deseja");
             }
-            else if (flag == 0)
+            //caso nao seja selecionado nenhum produto
+            else if (flag == 0) 
             {
                 MessageBox.Show("selecione o produto a ser adicionado");
             }
             else
             {
-
+                //criando a nova coluna total e conectando os dados recebidos pelas variaveis acima para serem exibidos no datagrid "OrderGv ao pressionar a linha
+                //selecionada da tabela "UsersGV" e o botao "add to cart")
                 total = price * Convert.ToInt32(Quant.Text);
                 table.Rows.Add(num, Name, cat, price, total);
                 OrdersGV.DataSource = table;
                 flag = 0;
 
             }
-            sum = sum + total;
-            Amount.Text = "Total: R$ " + sum + ",00";
+            sum = sum + total;  // sum assumira o valor total de todas as ordens selecionadas
+            Amount.Text = "Total: R$ " + sum + ",00"; // label "total"
 
         }
 
@@ -174,10 +181,11 @@ namespace CafeManagement
 
         private void OrderCat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FilterCat();
+            FilterCat(); // estanciando o metodo criado acima para o elemento "Category"(cat)
         }
 
         private void button2_Click(object sender, EventArgs e)
+            //botao "Place the order"
         {
             if (sum > 0)
             {

@@ -10,10 +10,12 @@ namespace CafeManagement
         public Form1()
         {
             InitializeComponent();
+            //colocando senha de login como caracter escondido
             Password.Text = "";
             Password.PasswordChar = '*';
         }
-        SqlConnection con = new SqlConnection(@"Data Source=localhost\sqlexpress;Initial Catalog=Teste99;Integrated Security=True");
+        SqlConnection con = new SqlConnection(@"Data Source=localhost\sqlexpress;Initial Catalog=Teste99;Integrated Security=True"); //passando a conexao do localhost pra uma string de conexao
+                                                                                                                                                                                                              
 
         private void label7_Click(object sender, EventArgs e)
         {
@@ -31,7 +33,8 @@ namespace CafeManagement
         }
 
         private void label4_Click(object sender, EventArgs e)
-        {
+        {    
+            //
             this.Hide();
             GuestOrder guest = new GuestOrder();
             guest.Show();
@@ -42,20 +45,24 @@ namespace CafeManagement
         {
 
         }
-        public static string user;
+        public static string user; // metodo criado para ser estanciado na "userOrders" para preencher o texbox "selerName"
+
 
 
         private void button1_Click(object sender, EventArgs e)
         {
             user = LgName.Text;
+            //login de usuario, Se o textbox de usuario ou senha estiverem vazios, insira a mensagem caso contrario,
+            //abre o banco de dados e atraves do comando sql entre paranteses, selecione todos da tabela "UsersTbl"
+            //e caso o login conferir com os dados da tabela é redirecionado para o forms "usersordes" 
 
-            if (LgName.Text == "" || Password.Text == "")
+            if (LgName.Text == "" || Password.Text == "") 
             {
-                MessageBox.Show("Insira o usuario e senha");
+                MessageBox.Show("Insira o usuario e senha");  
             }
             else
             {
-                con.Open();
+                con.Open(); 
                 SqlDataAdapter sda = new SqlDataAdapter("select count (*) from UsersTbl where Uname = '" + LgName.Text + "'and Upassword = '" + Password.Text + "'", con);
                 DataTable dt = new DataTable();
                 sda.Fill(dt);
